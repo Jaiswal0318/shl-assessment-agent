@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+.env
+*.pyc
+.pytest_cache/
+.mypy_cache/
+catalog/processed/
+catalog_page.html
+*.egg-info/
+dist/
+build/
