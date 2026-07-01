@@ -59,6 +59,7 @@ Render sets `PORT` automatically — do not override it.
 
 ## Troubleshooting
 
-- **Build timeout**: Free tier may time out on first build. Retry deploy or upgrade plan.
+- **Deploy failed (build OOM)**: Fixed by using CPU-only PyTorch and committing pre-built FAISS index. Pull latest `master` and re-sync the blueprint.
+- **Build timeout**: First deploy may take 8–12 minutes. Retry if needed.
 - **503 on /chat**: Service still starting (cold start ~30s after idle).
 - **Gemini errors**: Confirm `GEMINI_API_KEY` is set in Render → Environment.
