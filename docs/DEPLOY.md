@@ -50,13 +50,13 @@ curl -X POST https://shl-assessment-agent.onrender.com/chat \
 |----------|----------|-------|
 | `GEMINI_API_KEY` | Yes | Your Gemini API key |
 | `GEMINI_MODEL` | No | `gemini-2.5-flash` |
-| `EMBEDDING_MODEL` | No | `all-MiniLM-L6-v2` |
+| `EMBEDDING_MODEL` | No | `sentence-transformers/all-MiniLM-L6-v2` |
 
 Render sets `PORT` automatically — do not override it.
 
 ## Troubleshooting
 
-- **Deploy failed (build OOM)**: Fixed by using CPU-only PyTorch and committing pre-built FAISS index. Pull latest `master` and re-sync the blueprint.
+- **Deploy failed (build OOM)**: Production uses FastEmbed (ONNX) instead of PyTorch. Pull latest `master` and re-sync.
 - **Build timeout**: First deploy may take 8–12 minutes. Retry if needed.
 - **503 on /chat**: Service still starting (cold start ~30s after idle).
 - **Gemini errors**: Confirm `GEMINI_API_KEY` is set in Render → Environment.

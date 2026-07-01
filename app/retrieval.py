@@ -8,10 +8,10 @@ from pathlib import Path
 
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from app.catalog import Assessment
-from app.config import EMBEDDING_MODEL, FAISS_INDEX_PATH, TOP_K_RETRIEVAL
+from app.config import FAISS_INDEX_PATH, TOP_K_RETRIEVAL
+from app.embeddings import EmbeddingModel
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,8 @@ class RetrievalEngine:
         self._name_lower_map = {a.name.lower(): i for i, a in enumerate(assessments)}
         self._keyword_index: dict[str, set[int]] = {}
 
-        logger.info("Loading embedding model: %s", EMBEDDING_MODEL)
-        self.model = SentenceTransformer(EMBEDDING_MODEL)
+        logger.info("Loading embedding model")
+        self.model = EmbeddingModel()
 
         index_path = Path(FAISS_INDEX_PATH)
         embeddings_path = index_path.parent / "embeddings.npy"
@@ -52,8 +52,8 @@ class RetrievalEngine:
     ) -> None:
         search_texts = [a.search_text for a in assessments]
         logger.info("Encoding %d assessments...", len(search_texts))
-        embeddings = self.model.encode(search_texts, show_progress_bar=False, normalize_embeddings=True)
-        self.embeddings = np.array(embeddings, dtype=np.float32)
+        embeddings = self.model.encode(search_texts, normalize_embeddings=True)
+        self.embeddings = embeddings
 
         dim = self.embeddings.shape[1]
         self.index = faiss.IndexFlatIP(dim)
@@ -85,8 +85,7 @@ class RetrievalEngine:
     ) -> list[tuple[Assessment, float]]:
         k = top_k or TOP_K_RETRIEVAL
 
-        query_embedding = self.model.encode([query], show_progress_bar=False, normalize_embeddings=True)
-        query_vec = np.array(query_embedding, dtype=np.float32)
+        query_vec = self.model.encode([query], normalize_embeddings=True)
 
         n_search = min(len(self.assessments), k * 3)
         scores, indices = self.index.search(query_vec, n_search)

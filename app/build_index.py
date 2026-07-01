@@ -7,10 +7,10 @@ from pathlib import Path
 
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from app.catalog import load_catalog
-from app.config import CATALOG_PATH, EMBEDDING_MODEL, FAISS_INDEX_PATH
+from app.config import CATALOG_PATH, FAISS_INDEX_PATH
+from app.embeddings import EmbeddingModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,10 +22,9 @@ def build_index() -> None:
     assessments = load_catalog(CATALOG_PATH)
     logger.info("Building index for %d assessments", len(assessments))
 
-    model = SentenceTransformer(EMBEDDING_MODEL)
+    model = EmbeddingModel()
     texts = [a.search_text for a in assessments]
-    embeddings = model.encode(texts, show_progress_bar=True, normalize_embeddings=True)
-    matrix = np.array(embeddings, dtype=np.float32)
+    matrix = model.encode(texts, normalize_embeddings=True)
 
     dim = matrix.shape[1]
     index = faiss.IndexFlatIP(dim)

@@ -139,7 +139,7 @@ docker run -p 8000:8000 -e GEMINI_API_KEY=your_key shl-assessment-agent
 |----------|----------|---------|-------------|
 | `GEMINI_API_KEY` | Yes | — | Google Gemini API key |
 | `GEMINI_MODEL` | No | `gemini-2.5-flash` | Gemini model name |
-| `EMBEDDING_MODEL` | No | `all-MiniLM-L6-v2` | Sentence Transformers model |
+| `EMBEDDING_MODEL` | No | `sentence-transformers/all-MiniLM-L6-v2` | FastEmbed ONNX model |
 | `TOP_K_RETRIEVAL` | No | `30` | Candidates retrieved per query |
 | `TOP_K_RECOMMEND` | No | `10` | Max recommendations returned |
 | `MAX_TURNS` | No | `8` | Conversation turn budget |
