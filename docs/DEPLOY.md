@@ -12,11 +12,8 @@ Create a new repository on GitHub named `shl-assessment-agent`, then:
 
 ```bash
 git remote add origin https://github.com/YOUR_USERNAME/shl-assessment-agent.git
-git branch -M main
-git push -u origin main
+git push -u origin master
 ```
-
-> If your default branch is `master`, update `branch: master` in `render.yaml` or rename to `main`.
 
 ## 2. Create Render Blueprint
 
